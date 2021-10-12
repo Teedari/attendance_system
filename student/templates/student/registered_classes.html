@@ -1,0 +1,45 @@
+{% extends "student_base.html" %}
+
+
+{% block Content %}
+<div class="py-4">
+  <h2 class="display-3">Registered Classes</h2>
+</div>
+<div class="d-flex justify-content-end">
+  <a href='{% url "student:register_class" %}' type="button" class="btn btn-primary tee-btn" data-bs-container="body" data-bs-toggle="popover" data-bs-placement="top" data-bs-content="Top popover">
+   <i class="fa fa-plus"></i> Add Class
+  </a>
+</div>
+<hr>
+<h2 class='display-4 py-4'>Enroll classes</h2>
+<hr>
+<div class="d-flex flex-wrap gap-4 mt-4">
+  {% for course in courses %}
+  <div class="card p-4 shadow tee-attendance__card">
+    <div class="card-body">
+      <div class="d-flex gap-4 align-items-center">
+        <div class="qrcode-box my-4">
+          <img src="{{course.qr_code.url}}" alt="">
+        </div>
+        <!-- <div>
+          <p class="display-6">Attendance in session</p>
+          <i class="fa fa-check"></i>
+        </div> -->
+      </div>
+      <p>{{course.name}}</p>
+      <p><b>{{course.code}}</b></p>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+
+
+{% endblock Content %}
+{% block Script %}
+  <script>
+    $(document).ready(function () {
+      const awn = new AWN()
+      awn.modal('<b>Custom modal window message</b>')
+    })
+  </script>
+{% endblock Script %}

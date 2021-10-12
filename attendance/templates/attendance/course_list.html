@@ -1,0 +1,41 @@
+{% extends "admin_base.html" %}
+
+
+{% block Content %}
+  <div class="card p-4">
+    <p class="display-3">
+      Courses Created
+    </p>
+  </div>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>#</th>
+        <th>Course Name</th>
+        <th>Course Code</th>
+        <!-- <th>Attendance</th> -->
+        <th>Registered students</th>
+        <th>Mark attendance</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% if profile %}
+        {% for course in profile.lecturer_courses %}
+        <tr>
+          <td>#</td>
+          <td>{{course.name}}</td>
+          <td>{{course.code}}</td>
+          <!-- <td>
+            <select name="" id="">
+           
+          </select>
+          </td> -->
+          <td><a href="{% url 'attendance:course_registered_students' course.id %}" class="btn btn-success tee-btn"><i class="fa fa-eye"></i> students</a></td>
+          <td><a href="{% url 'attendance:course_attendance' course.id %}" class="btn btn-outline-primary tee-btn"><i class="fa fa-eye"></i> attendance</a></td>
+        </tr>
+        {% endfor %}
+      {% endif %}
+      
+    </tbody>
+  </table>
+{% endblock Content %}

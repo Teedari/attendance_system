@@ -1,0 +1,54 @@
+{% extends "student_base.html" %}
+
+
+{% block Content %}
+<div class="py-4">
+  <h2 class="display-3">Complete Attendance</h2>
+</div>
+{% if err %}
+  <div class="alert alert-info">{{err}}</div>
+{% endif %}
+<div class="row">
+  <div class="col-md-5">
+    <div class="card p-4 shadow tee-attendance__card">
+      <div class="card-body">
+        <div class="d-flex gap-4 align-items-center">
+          <div class="qrcode-box my-4">
+            <img src="{{course.qr_code.url}}" alt="">
+          </div>
+          <!-- <div>
+            <p class="display-6">Attendance in session</p>
+            <i class="fa fa-check"></i>
+          </div> -->
+        </div>
+        <p>{{course.name}}</p>
+        <p><b>{{course.code}}</b></p>
+      </div>
+    </div>
+  </div>
+  {% if session_expired %}
+    <div class="col-md-7 d-flex align-items-center justify-content-center" id='session-expired'>
+      <p class="display-3">Attendance Session has expired!!</p>
+    </div>
+  {% else %}
+    
+  <div class="col-md-7">
+    <p class="text-center">Click on the button to allow student to take attendance</p>
+    <div class="d-flex w-100 h-100 align-items-center justify-content-center flex-column">
+     
+      <form action="" method="post" class="form-inline" id='session-form'>
+        {% csrf_token %}
+        <input type="checkbox" checked class="invisible" name='course_id'>
+        {% if err %}
+          <button type="submit" class="btn btn-outline-primary tee-btn disabled">Cannot Mark Attendance</button>
+        {% endif %}
+        {% if not err %}
+          <button type="submit" class="btn btn-outline-primary tee-btn">Mark Attendance</button>
+        {% endif %}
+      </form>
+    </div>
+  </div>
+  {% endif %}
+  
+</div>
+{% endblock Content %}

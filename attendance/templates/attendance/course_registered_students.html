@@ -1,0 +1,65 @@
+{% extends "admin_base.html" %}
+
+
+{% block Content %}
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card p-4 shadow tee-attendance__card">
+        <div class="card-body">
+          <div class="d-flex gap-4 align-items-center">
+            <div class="qrcode-box my-4">
+              <img src="{{course.qr_code.url}}" alt="">
+            </div>
+          </div>
+          <p>{{course.name}}</p>
+          <p><b>{{course.code}}</b></p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-8">
+    </div>
+  </div>
+  <div class='py-4'>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Index Number</th>
+          <th>Name</th>
+          <th>Level</th>
+          <th>Department</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for student in students  %}
+          <tr>
+            <td></td>
+            <td>{{student.user.username}}</td>
+            <td>{{student.fullname}}</td>
+            <td>{{student.level}}</td>
+            <td>{{student.department}}</td>
+            <td>
+              <form action="" method="post" class="form-inline" id='session-form'>
+                {% csrf_token %}
+                <input type="checkbox" checked name='studentID' class="invisible" value="{{student.id}}">
+                <button type="submit" class="btn btn-outline-danger tee-btn"><i class="fa fa-trash"></i></button>
+              </form>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+{% endblock Content %}
+
+{% block Script %}
+  <script>
+    $(document).ready(function(){
+      $('#session-btn').on('click', function(){
+        $('#session-form').removeClass('invisible').show(200)
+        $(this).hide()
+      })
+    })
+  </script>
+{% endblock Script %}

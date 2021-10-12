@@ -1,0 +1,31 @@
+{% extends "student_base.html" %}
+
+
+{% block Content %}
+  <div class="py-4">
+    WELCOME TO THE STUDENT DASHBOARD
+  </div>
+  <div class="row">
+    <div class="col-md-4">
+      <a href="{% url 'student:registered_classes' %}" class="card btn btn-outline-primary p-4">
+        <div class="card-body">
+           <h3> View Registered Classes</h3>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'student:mark_attendance' %}" class="card btn btn-outline-warning p-4">
+        <div class="card-body">
+          <h3>  Take Attendance</h3>
+        </div>
+      </a>
+    </div>
+    <div class="col-md-4">
+      <a href="{% url 'student:mark_attendance_record' %}" class="card btn btn-outline-danger p-4">
+        <div class="card-body">
+           <h3> View Attendance Records</h3>
+        </div>
+      </a>
+    </div>
+  </div>
+{% endblock Content %}

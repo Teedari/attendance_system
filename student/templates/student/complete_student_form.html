@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+
+
+
+{% block Content %}
+  
+  <div class="incompleted-form" style="z-index: 99999999;">
+    <h3 class="display-3 py-4">Complete this section of the form</h3>
+    <div class="card">
+      <div class="card-body">
+        <form action="" method="post">
+          {% csrf_token %}
+          <div class="form-group">
+            <label for="">Level: </label>
+            <input type="text" class="form-control" name='level'>
+          </div>
+          <div class="form-group">
+            <label for="">Deparment: </label>
+            <input type="text" class="form-control" name='department'>
+          </div>
+          <div class="form-group">
+            <button class="btn btn-primary">
+              submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+{% endblock Content %}

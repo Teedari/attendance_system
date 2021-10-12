@@ -1,0 +1,48 @@
+{% extends "student_base.html" %}
+
+
+
+{% block Content %}
+  <div class='py-4'>
+    {% if not courses %}
+      <h2 class="display-2 text-center">NO records</h2>
+    {% endif %}
+    {% for course in courses  %}
+    <div class="row" style="margin-top:5rem;">
+      <div class="col-md-4">
+        <div class="card p-4 shadow btn btn-outline-success tee-btn">
+          {{course.name}}
+        </div>
+      </div>
+      <div class="col-md-8 card shadow p-4 tee-tiles">
+        {% for attendance in course.all_attendance %}
+          <p class="text-muted p-4">{{attendance.created_at}}
+
+            <i class="fa fa-check text-success"></i>
+          </p>
+
+        {% endfor %}
+        <!-- <table class='table'>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Index number</th>
+              <th>Name</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for student in course.all_attendance %}
+              <tr>
+                <td></td>
+                <td>{{student.username}}</td>
+                <td>{{student.user.first_name}} {{student.user.last_name}}</td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table> -->
+  
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+{% endblock Content %}

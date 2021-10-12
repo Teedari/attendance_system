@@ -1,0 +1,113 @@
+{% extends "student_base.html" %}
+
+
+{% block Content %}
+<div class="py-4">
+  <h2 class="display-3">Register a new class</h2>
+</div>
+
+<div id='tee-alert-success' class="alert alert-success d-none" role="alert">
+ <b>Class Registered Successfully</b>
+</div>
+<div id='tee-alert-error-1' class="alert alert-danger d-none" role="alert">
+ <b>You've already registered for this class</b>
+</div>
+<div id='tee-alert-error-2' class="alert alert-danger d-none" role="alert">
+ <b>Registration failed</b>
+</div>
+<div class="row">
+  <div class="col-md-5">
+    <div class="tee-qrcode position-relative" id="qrcode">
+      <img id="qrcode-img" src="" alt="" >
+    </div>
+    <div class="col-md-7">
+      <i class="fa d-none" id='qrcode-check'
+       style="font-size: 5rem;"></i>
+    </div>
+  </div>
+</div>
+
+<p><input type="file"  accept="image/*" name="file" id="file"  onchange="loadFile(event)" class="d-none"></p>
+<p id="content"></p>
+<p><label for="file" style="cursor: pointer;">Upload Qrcode</label></p>
+
+<form action="" id='class-form'>
+  {% csrf_token %}
+  <input id="qr" type="text" value="" style="visibility: hidden;">
+  <button id="register" type="submit"  class="btn btn-primary p-4 disabled">Register</button>
+</form>
+
+<div id='success-toast' class="toast align-items-center text-white bg-primary border-0" role="alert" aria-live="assertive" aria-atomic="true">
+  <div class="d-flex">
+    <div class="toast-body">
+      Hello, world! This is a toast message.
+    </div>
+    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+  </div>
+</div>
+
+{% endblock Content %}
+{% block Script %}
+  <script>
+    let load = false;
+
+
+    function alertView(name){
+      $(`#tee-alert-${name}`).removeClass('d-none')
+      setTimeout(function(){
+        $(`#tee-alert-${name}`).addClass('d-none')
+      }, 1000)
+    }
+
+    var loadFile = function(event) {
+      var image = document.getElementById('qrcode-img');
+      image.src = URL.createObjectURL(event.target.files[0]);
+
+  
+      if(event.target.files[0].name.slice(-3) === 'png'){
+        $('#qrcode-check').removeClass('d-none').removeClass('fa-close').addClass('fa-check')
+        $('#register').removeClass('disabled')
+      }else{
+        $('#qrcode-check').removeClass('d-none').addClass('fa-close')
+        $('#register').addClass('disabled')
+      }
+    };
+
+    $('#class-form').on('submit', function(e){
+      e.preventDefault()
+      const qrcode_text = document.getElementById('content')
+      console.log(qrcode_text.textContent)
+      $('#qr').val(qrcode_text.textContent)
+      var formData = new FormData()
+      formData.append('csrfmiddlewaretoken', $('input[name="csrfmiddlewaretoken"]').val())
+      formData.append('code', qrcode_text.textContent.slice(-8))
+
+      console.log(formData, $('input[name="csrfmiddlewaretoken"]').val())
+    $.ajax({
+        url: '{% url "student:register_class" %}',
+        type: 'POST',
+        dataType: 'json',
+        data: {
+          'csrfmiddlewaretoken': $('input[name="csrfmiddlewaretoken"]').val(),
+          'code': qrcode_text.textContent
+        },
+        success: function(res){
+          console.log(res)
+          if(res.status === 'success'){
+            alertView('success')
+          }else{
+            alertView('error-1')
+          }
+        },
+        error: function(err){
+          alertView('error-2')
+        },
+      })
+    })
+
+
+
+    $(document).ready(function () {
+    })
+  </script>
+{% endblock Script %}

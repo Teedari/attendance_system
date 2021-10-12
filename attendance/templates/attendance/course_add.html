@@ -1,0 +1,111 @@
+{% extends "admin_base.html" %}
+{% load static %}
+
+{% block PageHeader %}
+  <h3 class=""><i class="fa fa fa-bars"></i> Course</h3>
+  <ol class="list-unstyled d-flex gap-4">
+    <li><i class="fa fa-home"></i><a href="index.html">Course</a></li>
+    <li><i class="fa fa-bars"></i>Create</li>
+    <!-- <li><i class="fa fa-square-o"></i>Pages</li> -->
+  </ol>
+{% endblock PageHeader %}
+
+{% block Content %}
+
+  <div class="row align-items-center">
+    <div class="col-md-6 d-flex align-items-center justify-content-center flex-column">
+      <div class="tee-qrcode position-relative" id="qrcode">
+        <div class="tee-overlay position-absolute d-flex align-items-center justify-content-center">
+          <button id='qrcode-download-btn' class="btn btn-primary fa fa-upload tee-btn" ></button>
+        </div>
+      </div>
+      <div class="py-4">
+        <button id='qrcode-generate' class="btn btn-primary fa fa-refresh tee-btn" ></button>
+      </div>
+    </div>
+    <div class="col-md-6">
+      {% if errs and errs is not None %}
+      <div class="alert alert-danger" role="alert">
+        {% for err in errs.errors.values  %}
+          <small>{{err}}</small>
+        {% endfor %}
+      </div>
+      {% endif %}
+      <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="card shadow p-4 my-2">
+          <h3>Create new course</h3>
+        </div>
+        <div class="form-group">
+          <label for="">Course name</label>
+          <input type="text" name="name" class="form-control tee-form-control" id="course-name" required>
+        </div>
+        <div class="form-group">
+          <label for="">Course code</label>
+          <input type="text" name="code" class="form-control tee-form-control" id="course-code" required>
+       
+        </div>
+        <div class="form-group">
+          <label for="">Course File</label>
+          <input type="file" name="qr_code" class="form-control tee-form-control" required id='file'>
+          <p style="visibility: hidden;">Content: <small id="content"></small></p>
+        </div>
+        <div class="form-group">
+          <button type='submit' class="btn btn-primary tee-btn">
+            save
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+{% endblock Content %}
+
+{% block Script %}
+  <script>
+    $('document').ready(function(){
+      let qr_string = ''
+      let qr_str_arr = []
+    function createString(){
+
+    }
+    function downloadURI(uri, name) {
+      var link = document.createElement("a");
+      link.download = name;
+      link.href = uri;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      delete link;
+    };
+
+    function generateQRCode(text){
+      let qrcode = new QRCode(document.getElementById("qrcode"),
+      {
+       text: text,
+       width: 400,
+       height: 400,
+       colorDark : "#000000",
+       colorLight : "#ffffff",
+       correctLevel : QRCode.CorrectLevel.H
+     });
+
+     qrcode.clear()
+     qrcode.makeCode(text)
+    }
+
+
+
+    document.getElementById('qrcode-download-btn').addEventListener('click', () => {
+      let dataUrl = document.querySelector('#qrcode').querySelector('img').src;
+      downloadURI(dataUrl, `qrcode-${$('#course-code').val().replace(' ', '_')}.png`)
+    })
+
+    document.getElementById('qrcode-generate').addEventListener('click', () => {
+      const str = `${$('#course-code').val()}`
+      generateQRCode(str)
+    })
+
+    })
+  </script>
+  <script src="{% static 'dist/custom/js/qrReader.js' %}"></script>
+{% endblock Script %}

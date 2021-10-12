@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block Title %}
+  Registration
+{% endblock Title %}
+
+
+{% block Content %}
+<div class="tee-header">
+  <ul class="">
+    <li><a href="{% url 'auth_users:sign_in' %}" class="">Login</a></li>
+    <li><a href="{% url 'auth_users:sign_up_staff' %}" class="active">Staff</a></li>
+    <li><a href="{% url 'auth_users:sign_up_student' %}">Student</a></li>
+  </ul>
+</div>
+<div class="login-img3-body" style="min-height: 100vh;">
+  <div class="container">
+    <form class="login-form" action="" method='post'>
+      {% csrf_token %}
+      <div class="login-wrap">
+        <p class="login-img"><i class="icon_lock_alt"></i></p>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="icon_profile"></i></span>
+          <input name="first_name" type="text" class="form-control" placeholder="Fullname goes here .." autofocus required>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="icon_mail"></i></span>
+          <input name="email" type="text" class="form-control" placeholder="Email" autofocus required>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="icon_key"></i></span>
+          <input name='username' type="text" class="form-control" placeholder="Lecturer ID" required>
+        </div>
+        <div class="input-group">
+          <span class="input-group-addon"><i class="icon_key_alt"></i></span>
+          <input name='password' type="password" class="form-control" placeholder="Password" required>
+        </div>
+
+        <button class="btn btn-primary btn-lg btn-block" type="submit">Sign up</button>
+      </div>
+      {% if errs and hasError %}
+        <ol class="list-unstyled text-danger text-center">
+        {% for error in errs.errors.values %}
+            <li><strong>{{ error }}</strong></li>
+        {% endfor %}
+        </ol>
+      {% endif %}
+       <div class="text-center">
+        <a href="{% url 'auth_users:sign_in' %}" class="">Already have an account</a>
+       </div>
+    </form>
+  </div>
+
+</div>
+{% endblock Content %}

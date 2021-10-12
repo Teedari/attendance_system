@@ -1,0 +1,66 @@
+{% extends "student_base.html" %}
+
+
+{% block Content %}
+<div class="py-4">
+  <h2 class="display-3">Mark Attendance</h2>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <div id="tee-alert-success" class="alert alert-success d-none" role="alert">
+      <strong>Attendance taken</strong>
+    </div>
+  </div>
+</div>
+<table class="table">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>Course name</th>
+      <th>Course code</th>
+      <th>Action</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for course in courses  %}
+      <tr>
+        <td></td>
+        <td>{{course.name}}</td>
+        <td>{{course.code}}</td>
+        <td>
+            <a href="{% url 'student:goto_course' course.id %}" class="btn btn-success">
+              <i class="fa fa-check"></i> mark attendance
+            </a>
+        </td>
+        
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock Content %}
+
+{% block Script %}
+<script>
+
+  function alertView(name){
+    $(`#tee-alert-${name}`).removeClass('d-none')
+    setTimeout(function(){
+      $(`#tee-alert-${name}`).addClass('d-none')
+    }, 10000)
+  }
+
+  $('#mark-attendance').on('submit', function(){
+    $.ajax({
+      url: '{% url "student:mark_attendance" %}',
+      type: 'POST',
+      data: $(this).serialize(),
+      success: function(res){
+        alertView('success')
+      },
+      error: function(res){
+
+      }
+    })
+  })
+</script>
+{% endblock Script %}
